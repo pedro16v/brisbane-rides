@@ -736,6 +736,25 @@ main.article {
   margin-bottom: 2px;
 }
 
+/* Compass bearing arrow — points from Brisbane CBD toward the destination.
+   Bearing is set per-destination via the --bearing custom property. */
+.dest-coord .bearing {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  margin-left: 8px;
+  vertical-align: -2px;
+  color: var(--brick);
+  transform: rotate(var(--bearing, 0deg));
+}
+
+.dest-coord .bearing svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
 /* =========================================================
    HOMEPAGE — Magazine Cover
    ========================================================= */

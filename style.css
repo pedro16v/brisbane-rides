@@ -198,7 +198,9 @@ a {
 }
 
 a:hover {
-  color: var(--ochre);
+  /* Darken text on hover and use ochre only for the underline accent — keeps
+     contrast above WCAG AA. (var(--ochre) on var(--paper) is ~2.6:1.) */
+  color: var(--brick-deep);
   border-bottom-color: var(--ochre);
 }
 
@@ -1095,6 +1097,19 @@ main.article {
   margin-bottom: 8px;
   font-variation-settings: 'opsz' 36, 'SOFT' 40;
   color: var(--ink);
+}
+
+/* Next-article link — sits at the foot of each article */
+.next-article-link {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.next-article {
+  margin-top: 32px;
+  text-align: center;
 }
 
 /* =========================================================

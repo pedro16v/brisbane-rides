@@ -187,6 +187,35 @@ a:hover {
   border-bottom-color: var(--ochre);
 }
 
+/* Map links — landmarks linked to Google Maps */
+.map-link {
+  color: inherit;
+  border-bottom: 1px dotted var(--brick);
+  text-decoration: none;
+  transition: color 0.2s, border-bottom-color 0.2s, background-color 0.2s;
+}
+
+.map-link::after {
+  content: ' \01F4CD';
+  font-size: 0.78em;
+  color: var(--brick);
+  opacity: 0.75;
+  margin-left: 1px;
+  vertical-align: baseline;
+}
+
+.map-link:hover {
+  color: var(--brick);
+  border-bottom-color: var(--ochre);
+  background-color: rgba(184, 134, 46, 0.12);
+}
+
+.map-link:focus-visible {
+  outline: 2px solid var(--ochre);
+  outline-offset: 2px;
+  color: var(--brick);
+}
+
 /* Mono labels and data */
 .mono { font-family: var(--mono); }
 .coord {

@@ -34,7 +34,12 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* Prevent iOS Safari from auto-inflating text on rotation */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 
 body {
   background: var(--paper);
@@ -47,7 +52,13 @@ body {
   text-rendering: geometricPrecision;
   position: relative;
   min-height: 100vh;
+  /* Hard guard against accidental horizontal scroll on small screens */
+  overflow-x: hidden;
 }
+
+/* Responsive media — every image scales with its container by default. */
+img, svg { max-width: 100%; height: auto; }
+.plate img { height: 100%; } /* plates rely on cover-fill */
 
 /* Paper grain — applied to body via pseudo-element */
 body::before {
@@ -143,6 +154,10 @@ h4 { font-family: var(--display); font-weight: 500; font-variation-settings: 'op
   margin-top: 4px;
 }
 
+@media (max-width: 540px) {
+  .dropcap::first-letter { font-size: 4.2em; padding-right: 0.08em; }
+}
+
 .pull-quote {
   font-family: var(--display);
   font-variation-settings: 'opsz' 72, 'SOFT' 100;
@@ -187,6 +202,15 @@ a:hover {
   border-bottom-color: var(--ochre);
 }
 
+/* Visible focus for keyboard users — does not affect mouse clicks. */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--brick);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
 /* Mono labels and data */
 .mono { font-family: var(--mono); }
 .coord {
@@ -206,6 +230,8 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
   padding: 22px 48px 18px;
   border-bottom: 1px solid var(--ink);
   background: var(--paper);
@@ -241,6 +267,7 @@ a:hover {
   display: flex;
   gap: 32px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .atlas-nav-meta a {
@@ -251,6 +278,9 @@ a:hover {
   color: var(--ink-soft);
   border-bottom: none;
   font-weight: 500;
+  /* Pad so each link is a comfortable tap target (≥ 44px height incl. padding) */
+  padding: 8px 0;
+  display: inline-block;
 }
 
 .atlas-nav-meta a:hover { color: var(--brick); }
@@ -691,6 +721,8 @@ main.article {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 24px;
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.22em;
@@ -808,6 +840,70 @@ main.article {
   color: var(--ink-fade);
   margin-top: 10px;
   display: inline-block;
+}
+
+/* "Note from the editors" section on the homepage */
+.editors-note {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 80px 60px;
+}
+
+.editors-headline {
+  font-size: clamp(34px, 5.4vw, 56px);
+  margin-top: 16px;
+  margin-bottom: 24px;
+  line-height: 1.02;
+}
+
+.editors-headline-em {
+  font-style: italic;
+  color: var(--brick);
+  font-variation-settings: 'opsz' 96, 'SOFT' 100;
+}
+
+/* "Contents at a glance" 4-up cards on the homepage */
+.contents-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  margin-top: 16px;
+}
+
+.contents-card {
+  border-bottom: none;
+  color: var(--ink);
+  display: block;
+}
+
+.contents-card-meta {
+  padding: 16px 4px;
+}
+
+.contents-card-meta .kicker { margin-bottom: 6px; }
+
+.contents-card-meta h3 {
+  font-size: clamp(20px, 2vw, 26px);
+  line-height: 1.05;
+}
+
+.contents-card:hover h3 { color: var(--brick); }
+
+.spec-grid-5 {
+  grid-template-columns: repeat(5, 1fr);
+  margin-bottom: 0;
+}
+
+@media (max-width: 1024px) {
+  .editors-note { padding: 64px 32px; }
+  .contents-grid { grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  .spec-grid-5 { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 540px) {
+  .editors-note { padding: 48px 18px; }
+  .contents-grid { grid-template-columns: 1fr; gap: 20px; }
+  .spec-grid-5 { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* Cover central illustration / contour map */
@@ -973,44 +1069,6 @@ main.article {
 }
 
 /* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 900px) {
-  .atlas-nav { padding: 16px 22px 14px; }
-  .atlas-nav::after { left: 22px; right: 22px; }
-  .atlas-nav-meta { gap: 16px; }
-  .atlas-nav-meta a { font-size: 10px; }
-  .atlas-nav-issue { display: none; }
-
-  main.article { padding: 0 22px 64px; }
-  .article-head { padding: 40px 0 32px; }
-  .article-body { font-size: 17px; }
-  .article-body h2 { font-size: 30px; }
-
-  .cover { padding: 32px 22px 28px; }
-  .cover-toc { grid-template-columns: 1fr 1fr; gap: 20px; }
-
-  .split-2col, .split-3-2, .split-2-3 { grid-template-columns: 1fr; gap: 24px; }
-
-  .dest-head { grid-template-columns: 1fr; gap: 12px; }
-  .dest-coord { text-align: left; }
-
-  .atlas-foot { grid-template-columns: 1fr 1fr; padding: 32px 22px 28px; }
-  .atlas-foot::before { left: 22px; right: 22px; }
-
-  .pull-quote { font-size: 1.7em; }
-  .article-meta { flex-wrap: wrap; gap: 12px; }
-}
-
-@media (max-width: 540px) {
-  .cover-toc { grid-template-columns: 1fr; }
-  .atlas-foot { grid-template-columns: 1fr; }
-  .atlas-nav-brand { font-size: 14px; }
-  .atlas-nav-meta { display: none; }
-}
-
-/* =========================================================
    ANIMATIONS — Subtle fade-in
    ========================================================= */
 
@@ -1079,7 +1137,7 @@ dl.data-list {
 
 dl.data-list > div {
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: minmax(160px, 200px) 1fr;
   gap: 24px;
   padding: 16px 0;
   border-bottom: 1px dashed var(--ink-ghost);
@@ -1100,7 +1158,13 @@ dl.data-list dd {
   font-size: 16.5px;
   line-height: 1.55;
   color: var(--ink);
+  /* Long URLs / phone numbers / strongs should never push the layout wider */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  min-width: 0;
 }
+
+dl.data-list dd a { overflow-wrap: anywhere; }
 
 /* Lists in article body */
 .article-body ul,
@@ -1158,10 +1222,6 @@ dl.data-list dd {
   margin-right: -80px;
 }
 
-@media (max-width: 900px) {
-  .figure.wide { margin-left: 0; margin-right: 0; }
-}
-
 .figure-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1169,6 +1229,116 @@ dl.data-list dd {
   margin: 32px 0;
 }
 
+/* Bucket-list custom route-map figure */
+.route-map-figure { margin-top: 48px; }
+.route-map-frame {
+  background: var(--paper-deep);
+  border: 1px solid var(--ink);
+  padding: 32px;
+  position: relative;
+}
+.route-map-kicker {
+  color: var(--brick);
+  margin-bottom: 16px;
+  display: block;
+}
+
+/* =========================================================
+   RESPONSIVE
+   Breakpoints: 1024 (tablet landscape), 900 (small tablet), 768 (large phone),
+                540 (phone), 420 (small phone).
+   Placed at end of stylesheet so they always win on equal specificity.
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  /* Pull margins tighter on tablet-ish widths so wide figures don't overflow */
+  .figure.wide { margin-left: -24px; margin-right: -24px; }
+
+  /* Cover hero gets some breathing room — the title at 14vw is enormous here */
+  .cover-map { inset: 140px 40px 200px; }
+}
+
+@media (max-width: 900px) {
+  .atlas-nav { padding: 14px 22px; gap: 12px; }
+  .atlas-nav::after { left: 22px; right: 22px; }
+  .atlas-nav-meta { gap: 14px 20px; }
+  .atlas-nav-meta a { font-size: 10.5px; padding: 6px 0; }
+  .atlas-nav-issue { display: none; }
+
+  main.article { padding: 0 22px 64px; }
+  .article-head { padding: 40px 0 32px; margin-bottom: 40px; }
+  .article-body { font-size: 17px; }
+  .article-body h2 { font-size: 28px; margin: 48px 0 8px; }
+  .article-body h3 { font-size: 22px; margin: 32px 0 6px; }
+  .article-body p + p { text-indent: 1em; }
+
+  .cover { padding: 28px 22px; min-height: auto; }
+  .cover-map { inset: 100px 20px 180px; opacity: 0.25; }
+  .cover-toc { grid-template-columns: 1fr 1fr; gap: 20px; padding-top: 22px; margin-top: 18px; }
+  .cover-title-wrap { padding: 16px 0; }
+
+  .split-2col, .split-3-2, .split-2-3 { grid-template-columns: 1fr; gap: 24px; }
+
+  .dest { margin: 48px 0; }
+  .dest-head { grid-template-columns: 1fr; gap: 12px; padding-bottom: 14px; margin-bottom: 24px; }
+  .dest-coord { text-align: left; padding-bottom: 0; }
+
+  .atlas-foot { grid-template-columns: 1fr 1fr; padding: 32px 22px 28px; gap: 24px; }
+  .atlas-foot::before { left: 22px; right: 22px; }
+
+  .pull-quote { font-size: 1.55em; }
+  .article-meta { flex-wrap: wrap; gap: 8px 14px; justify-content: flex-start; }
+  .article-meta > span { padding: 0 10px 0 0; border-right: none; }
+
+  /* Generic spec grids — never force 4-5 columns at this width */
+  .spec-grid { grid-template-columns: repeat(2, 1fr); }
+  .spec-grid > div { padding: 12px 12px 12px 0; }
+
+  /* Wide figure margin off — kept inside the article column on small screens */
+  .figure.wide { margin-left: 0; margin-right: 0; }
+}
+
+@media (max-width: 768px) {
+  /* Switch the data list to a stacked label/value rhythm — keeps every value
+     readable instead of crushing into a 1fr behind a fixed dt column. */
+  dl.data-list > div {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 14px 0;
+  }
+  dl.data-list dt { font-size: 10.5px; }
+  dl.data-list dd { font-size: 16px; }
+
+  .route-map-frame { padding: 20px 16px; }
+}
+
 @media (max-width: 700px) {
   .figure-grid-2 { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 540px) {
+  .cover-toc { grid-template-columns: 1fr; gap: 18px; }
+  .atlas-foot { grid-template-columns: 1fr; }
+  .atlas-nav-brand { font-size: 14px; }
+  .atlas-nav-meta { gap: 4px 18px; width: 100%; }
+
+  /* spec grid: still 2 cols, but with smaller value type so they don't bleed */
+  .spec-value { font-size: 16px; }
+
+  .pull-quote { font-size: 1.35em; padding: 0.3em 0; }
+
+  /* Stamp shouldn't rotate so hard at the smallest width — looks fine wrapped flat */
+  .stamp { transform: rotate(-1.5deg); }
+}
+
+@media (max-width: 420px) {
+  main.article { padding: 0 16px 56px; }
+  .cover { padding: 22px 16px; }
+  .atlas-nav { padding: 12px 16px; }
+  .atlas-nav::after { left: 16px; right: 16px; }
+  .atlas-foot { padding: 28px 16px 24px; }
+  .atlas-foot::before { left: 16px; right: 16px; }
+
+  /* Cover marquee at the smallest width — separators stack onto two lines cleanly */
+  .cover-marquee-row span { font-size: 10px; letter-spacing: 0.18em; }
 }

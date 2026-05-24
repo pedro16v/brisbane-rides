@@ -465,11 +465,12 @@ button:focus-visible,
 }
 
 .spec-grid > div {
-  padding: 14px 16px 14px 0;
+  padding: 14px 20px;
   border-right: 1px dashed var(--ink-ghost);
 }
 
-.spec-grid > div:last-child { border-right: none; }
+.spec-grid > div:first-child { padding-left: 0; }
+.spec-grid > div:last-child { border-right: none; padding-right: 0; }
 
 .spec-label {
   font-family: var(--mono);
@@ -1336,7 +1337,9 @@ dl.data-list dd a { overflow-wrap: anywhere; }
 
   /* Generic spec grids — never force 4-5 columns at this width */
   .spec-grid { grid-template-columns: repeat(2, 1fr); }
-  .spec-grid > div { padding: 12px 12px 12px 0; }
+  .spec-grid > div { padding: 12px 16px; }
+  .spec-grid > div:first-child { padding-left: 0; }
+  .spec-grid > div:last-child { padding-right: 0; }
 
   /* Wide figure margin off — kept inside the article column on small screens */
   .figure.wide { margin-left: 0; margin-right: 0; }

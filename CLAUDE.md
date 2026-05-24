@@ -35,3 +35,19 @@ When the user asks for changes, the workflow is: edit → commit → push →
 **open a PR**. Don't stop at "pushed". If a PR for the branch already
 exists and is open, new commits roll into it automatically; if the
 previous PR is merged or closed, open a new one.
+
+### Check PR state before each commit cycle
+
+Before committing follow-up work on a branch that previously had a PR,
+**check whether that PR is still open** (use the GitHub MCP
+`pull_request_read` tool with `method: get`). If `state` is `closed`
+(merged or otherwise), the branch is now detached from any reviewable
+surface — commits will pile up unseen on a dead branch. In that case:
+
+1. Make the commits as planned.
+2. Push.
+3. **Open a new PR** for those commits, base `main`, head the same
+   branch. Reference the previous PR in the body for continuity.
+
+Apply this check at the start of each commit cycle on an existing
+branch, not just when the user notices.
